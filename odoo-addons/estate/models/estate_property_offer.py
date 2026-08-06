@@ -3,7 +3,8 @@
 from odoo import models, fields, api
 #from datetime import timedelta
 from dateutil.relativedelta import relativedelta
-from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
+
 
 
 import logging
@@ -26,7 +27,11 @@ class EstatePropertyOffer(models.Model):
         required=True
     )
 
-    price = fields.Float(string="Price") 
+    price = fields.Float(
+        string="Price", 
+        required=True
+    )
+     
     status = fields.Selection(
         string="Status",
         selection=[
@@ -110,3 +115,20 @@ class EstatePropertyOffer(models.Model):
             "The offer price must be strictly positive."
         ),
     ]
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            # raise an error if the user tries to create an offer with a lower amount than an existing offer.
+            offer_property = self.env["estate.property"].browse(vals["property_id"])
+            highest_offer = max(offer_property.offer_ids.mapped("price"), default=0)
+            if vals["price"] <= highest_offer:
+                    raise ValidationError(f"The offer must be higher than the existing offers: {highest_offer}")
+            # for other_offer in offer_property.offer_ids:
+            #     if vals["price"] <= other_offer.price:
+            #         raise ValidationError(f"The offer must be higher than the existing offers: {other_offer.price}")
+        offers = super().create(vals_list)
+        for offer in offers:
+            # At offer creation, set the property state to “Offer Received”.
+            offer.property_id.status = "offer_received"
+        return offers
