@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="estate_property_offer_view_tree" model="ir.ui.view">
+        <field name="name">estate.property.offer.tree</field>
+        <field name="model">estate.property.offer</field>
+
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="price"/>
+                <field name="partner_id"/>
+                <field name="validity"/>
+                <field name="date_deadline"/>
+
+                <button name="action_accept"
+                        type="object"
+                        icon="fa-check"/>
+
+                <button name="action_refuse"
+                        type="object"
+                        icon="fa-times"/>
+
+                <field name="status"/>
+                <field name="property_id"/>  
+                <field name="property_type_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="estate_property_offer_view_form" model="ir.ui.view">
+
+        <field name="name">estate.property.offer.form</field>
+        <field name="model">estate.property.offer</field>
+        <field name="arch" type="xml">
+            <form string="Property Offer">
+
+                <header>
+                    <button name="action_accept"
+                            type="object"
+                            string="Accept"/>
+
+                    <button name="action_refuse"
+                            type="object"
+                            string="Refuse"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <field name="price"/>
+                        <field name="partner_id"/>
+                        <field name="property_id"/>
+                        <field name="validity"/>
+                        <field name="date_deadline"/>
+                        <field name="status"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="estate_property_offer_view_search" model="ir.ui.view">
+        <field name="name">estate.property.offer.search</field>
+        <field name="model">estate.property.offer</field>
+
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="property_id"/>
+
+                <separator/>
+
+                <filter
+                    name="accepted"
+                    string="Accepted"
+                    domain="[('status', '=', 'accepted')]"/>
+
+                <filter
+                    name="refused"
+                    string="Refused"
+                    domain="[('status', '=', 'refused')]"/>
+
+                <separator/>
+
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_partner"
+                        string="Partner"
+                        context="{'group_by': 'partner_id'}"/>
+
+                    <filter
+                        name="group_property"
+                        string="Property"
+                        context="{'group_by': 'property_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="estate_property_offer_action" model="ir.actions.act_window">
+        <field name="name">Offers</field>
+        <field name="res_model">estate.property.offer</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="estate_property_offer_menu"
+        name="Offers"
+        parent="estate_menu_root"
+        action="estate_property_offer_action"/>
+
+</odoo>
