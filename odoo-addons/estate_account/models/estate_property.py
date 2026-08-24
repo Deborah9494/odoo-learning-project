@@ -1,6 +1,6 @@
-from odoo import api, models, Command
-
 import logging
+from odoo import models, Command
+
 _logger = logging.getLogger(__name__)
 
 class EstateProperty(models.Model):

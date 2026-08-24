@@ -1,13 +1,13 @@
 # estate/models/estate_property_offer.py
+import logging
+from dateutil.relativedelta import relativedelta
+#from datetime import timedelta
 
 from odoo import models, fields, api
-#from datetime import timedelta
-from dateutil.relativedelta import relativedelta
 from odoo.exceptions import ValidationError
 
 
 
-import logging
 _logger = logging.getLogger(__name__)
 
 class EstatePropertyOffer(models.Model):
