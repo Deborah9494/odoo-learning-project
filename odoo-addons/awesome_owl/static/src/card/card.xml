@@ -3,12 +3,36 @@
     <t t-name="awesome_owl.Card">
         <div class="card d-inline-block m-2" style="width: 18rem;">
             <div class="card-body">
-            <h5 class="card-title">
-                <t t-esc="props.title"/>
-            </h5>
-            <p class="card-text">
-                <t t-out="props.content"/>
-            </p>
+
+                <h5 class="card-title d-flex justify-content-between align-items-center">
+                    <!--
+                    d-flex → makes the title area a flex container.
+                    justify-content-between → pushes the title to the left and button to the right.
+                    align-items-center → vertically centers them.
+                    btn → Bootstrap button base style.
+                    btn-sm → makes the button smaller.
+                    btn-outline-secondary → gives you a subtle outlined button instead of a solid one.
+                     -->
+                    <span>
+                        <t t-esc="props.title"/>
+                    </span>
+
+                    <button
+                        class="btn btn-sm btn-outline-secondary"
+                        t-on-click="toggleContent">
+                        <t t-if="isOpen.value">Hide</t>
+                        <t t-else="">Show</t>
+                    </button>
+                </h5>
+
+                <div
+                    t-if="isOpen.value"
+                    class="card-text mt-3 pt-3 border-top d-flex align-items-center"
+                    style="min-height: 100px;">
+
+                    <t t-slot="default"/>
+
+                </div>
             </div>
         </div>
     </t>
