@@ -5,25 +5,25 @@ import { registry } from "@web/core/registry";
 import { Layout } from "@web/search/layout";
 import { useService } from "@web/core/utils/hooks";
 import { DashboardItem } from "./dashboard_item/dashboard_item";
+import { ChartComponent } from "./chart_component/chart_component";
 
 class AwesomeDashboard extends Component {
     static template = "awesome_dashboard.AwesomeDashboard";
     static components = { 
         Layout,
         DashboardItem,
+        ChartComponent,
     };
-
     setup() {
         this.display = {
             controlPanel: {},
         };
-
         this.action = useService("action");
+        // this.rpc = useService("rpc");
+        this.statistics = useService("awesome_dashboard.statistics");
 
-        this.rpc = useService("rpc");
         onWillStart(async () => {
-            this.statistics = await this.rpc("/awesome_dashboard/statistics");
-            // console.log(this.statistics);
+            this.statistics = await this.statistics.loadStatistics();
         });
 
     }

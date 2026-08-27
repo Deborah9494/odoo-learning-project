@@ -39,6 +39,16 @@
                     </div>
                 </DashboardItem>
 
+                <DashboardItem size="2">
+                    Shirt orders by size
+                    <div class="">
+                        <ChartComponent 
+                            type="'pie'"
+                            label="'Shirt orders by size'"
+                            data="statistics.orders_by_size"/>
+                    </div>
+                </DashboardItem>
+
             </div>
         </Layout>
     </t>
