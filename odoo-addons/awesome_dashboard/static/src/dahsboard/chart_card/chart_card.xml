@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="awesome_dashboard.ChartCard">
+        <div class="h-100">
+            <div>
+                <t t-esc="props.title"/>
+            </div>
+
+            <div class="h-100">
+                <ChartComponent
+                    type="props.type"
+                    label="props.title"
+                    data="props.data"
+                />
+            </div>
+        </div>
+    </t>
+
+</templates>

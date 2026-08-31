@@ -1,5 +1,12 @@
 /** @odoo-module **/
-import { Component, onWillStart, onMounted, onWillUnmount, useRef } from "@odoo/owl";
+import { 
+    Component, 
+    onWillStart, 
+    onMounted, 
+    onWillUnmount, 
+    onWillUpdateProps,
+    useRef 
+} from "@odoo/owl";
 import { loadJS } from "@web/core/assets";
 import { getColor } from "@web/core/colors/colors";
 
@@ -15,14 +22,25 @@ export class ChartComponent extends Component {
     setup() {
         // reference to the canvas
         this.canvasRef = useRef("canvas");
+        
+        // Load Chart.js before the component starts
         onWillStart(async () => {
-            // chart: load Chart.js
             await loadJS("/web/static/lib/Chart/Chart.js");
         }); 
-        // chart: on mounted (when DOM actually exists): create chart
+
+        // // Create the chart when the canvas exists in the DOM
         onMounted(() => {
             this.renderChart();
         });
+
+        // Update the existing chart when the data props change
+        onWillUpdateProps((nextProps) => {
+            this.chart.data.labels = Object.keys(nextProps.data);
+            this.chart.data.datasets[0].data = Object.values(nextProps.data);
+            this.chart.update();
+        });
+
+    // Destroy the Chart.js instance when the component is removed
         onWillUnmount(() => {
             this.chart.destroy();
         });
