@@ -7,8 +7,8 @@ class TodoList(models.Model):
     _description = "Todo List"
     _order = "id desc"
 
-    name = fields.Char(string="Title", required=True) 
-    description = fields.Text(string="Description", required=True)
+    name = fields.Char(string="Project Title", required=True) 
+    description = fields.Text(string="Project Description", required=True)
     
     active = fields.Boolean(
         default=True
@@ -22,5 +22,5 @@ class TodoList(models.Model):
     item_ids = fields.One2many(
         "todo.item",
         "list_id",
-        string="Items"
+        string="Tasks"
     )
