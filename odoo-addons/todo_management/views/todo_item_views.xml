@@ -108,16 +108,19 @@
             >
                 <field name="name"/>
                 <field name="list_id"/>
+                
                 <field name="priority"
-                    decoration-success="priority == 'low'"
-                    decoration-warning="priority == 'medium'"
-                    decoration-danger="priority == 'high'"/> 
+                    decoration-success="status == 'pending' and priority == 'low'"
+                    decoration-warning="status == 'pending' and priority == 'medium'"
+                    decoration-danger="status == 'pending' and priority == 'high'"/> 
+
                 <field name="due_status" column_invisible="True"/>
+
                 <field name="due_date"
-                    decoration-danger="due_status == 'overdue'"
-                    decoration-warning="due_status == 'today'"
-                    decoration-success="due_status == 'future'"
-                />
+                    decoration-danger="status == 'pending' and due_status == 'overdue'"
+                    decoration-warning="status == 'pending' and due_status == 'today'"
+                    decoration-success="status == 'pending' and due_status == 'future'"/>
+
                 <field name="description" column_invisible="True"/> 
                 <field name="status"/>
             </tree>
@@ -148,6 +151,39 @@
         <field name="name">Todo Items (Tasks)</field>
         <field name="res_model">todo.item</field>
         <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <!-- All tasks -->
+    <record id="todo_item_action_all" model="ir.actions.act_window">
+        <field name="name">All Tasks</field>
+        <field name="res_model">todo.item</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Pending tasks -->
+    <record id="todo_item_action_pending" model="ir.actions.act_window">
+        <field name="name">Pending Tasks</field>
+        <field name="res_model">todo.item</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('status', '=', 'pending')]</field>
+    </record>
+
+    <!-- Completed tasks -->
+    <record id="todo_item_action_completed" model="ir.actions.act_window">
+        <field name="name">Completed Tasks</field>
+        <field name="res_model">todo.item</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('status', '=', 'completed')]</field>
+    </record>
+
+    <!-- Overdue tasks -->
+    <record id="todo_item_action_overdue" model="ir.actions.act_window">
+        <field name="name">Overdue Tasks</field>
+        <field name="res_model">todo.item</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">
+            [('status', '=', 'pending'), ('due_date', '&lt;', context_today())]
+        </field>
     </record>
 
     <menuitem

@@ -47,12 +47,14 @@ class TodoItem(models.Model):
         compute="_compute_due_status",
     )
 
-    @api.depends("due_date")
+    @api.depends("due_date", "status")
     def _compute_due_status(self):
         today = fields.Date.today()
 
         for item in self:
-            if not item.due_date:
+            if item.status == "completed":
+                item.due_status = False
+            elif not item.due_date:
                 item.due_status = False
             elif item.due_date < today:
                 item.due_status = "overdue"
@@ -60,3 +62,20 @@ class TodoItem(models.Model):
                 item.due_status = "today"
             else:
                 item.due_status = "future"
+
+    @api.model
+    def get_dashboard_data(self):
+        today = fields.Date.today()
+        return {
+            "total": self.search_count([]),
+            "pending": self.search_count([
+                ("status", "=", "pending")
+            ]),
+            "completed": self.search_count([
+                ("status", "=", "completed")
+            ]),
+            "overdue": self.search_count([
+                ("status", "=", "pending"),
+                ("due_date", "<", today),
+            ]),
+        }

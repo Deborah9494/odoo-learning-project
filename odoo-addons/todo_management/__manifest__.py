@@ -11,6 +11,11 @@
         "views/todo_item_views.xml",
         'views/res_users_views.xml',
     ],                # XML, CSV...
+    "assets": {
+        "web.assets_backend": [
+            "todo_management/static/src/dashboard/**/*",
+        ],
+    },
     "installable": True,       # Se puede instalar
     "application": True,       # Aparece como aplicación
 }

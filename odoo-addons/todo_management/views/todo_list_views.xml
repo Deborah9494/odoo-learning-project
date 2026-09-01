@@ -76,9 +76,22 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <!-- When this action is executed, don't open a model view. Give control to a frontend component identified by this tag -->
+    <record id="todo_dashboard_action" model="ir.actions.client">
+        <field name="name">Todo Dashboard</field>
+        <field name="tag">todo_dashboard</field>
+    </record>
+
     <menuitem
         id="todo_menu_root"
         name="Todo"
+    />
+    
+    <menuitem
+        id="todo_dashboard_menu"
+        name="Dashboard"
+        parent="todo_menu_root"
+        action="todo_dashboard_action"
     />
 
     <menuitem
@@ -94,5 +107,7 @@
         parent="todo_menu_root"
         action="base.action_res_users"
     />
+
+    
 
 </odoo>

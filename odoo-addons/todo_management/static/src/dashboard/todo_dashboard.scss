@@ -1,0 +1,56 @@
+.o_todo_dashboard {
+    background-color: #f5f5f5;
+}
+
+.o_todo_dashboard_content {
+    padding: 32px;
+}
+
+.o_todo_dashboard_header {
+    margin-bottom: 24px;
+
+    h2 {
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+
+    p {
+        margin: 0;
+        color: #6c757d;
+    }
+}
+
+.o_todo_dashboard_cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.o_todo_card {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.o_todo_card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.o_todo_card_body {
+    padding: 24px;
+}
+
+.o_todo_card_title {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 8px;
+}
+
+.o_todo_card_value {
+    font-size: 32px;
+    font-weight: 600;
+}

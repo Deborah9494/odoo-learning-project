@@ -16,7 +16,7 @@ class TodoList(models.Model):
 
     user_id = fields.Many2one(
         "res.users",
-        string="User"
+        string="Owner"
     )
 
     item_ids = fields.One2many(

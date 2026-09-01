@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="todo_management.TodoDashboard">
+        <Layout display="display" className="'o_todo_dashboard h-100'">
+
+            <t t-set-slot="layout-buttons">
+                <button class="btn btn-primary" t-on-click="openUsers">
+                    Users
+                </button>
+            </t>
+
+            <div class="o_todo_dashboard_content">
+
+                <div class="o_todo_dashboard_header">
+                    <h2>Todo Dashboard</h2>
+                    <p>Overview of your tasks</p>
+                </div>
+
+                <div class="o_todo_dashboard_cards">
+                    <t t-foreach="items" t-as="item" t-key="item.id">
+                        <t t-component="item.Component" t-props="item.props"/>
+                    </t>
+                </div>
+
+            </div>
+
+        </Layout>
+    </t>
+
+</templates>
