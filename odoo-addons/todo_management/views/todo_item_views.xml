@@ -15,6 +15,7 @@
                 <field name="due_date"/>
                 <field name="description"/>
                 <field name="status"/>
+                <field name="due_status"/>
 
                 <templates>
                     <t t-name="kanban-box">
@@ -31,35 +32,65 @@
                                 <field name="list_id"/>
                             </div>
 
-                            <div>
-                                Priority:
+                            <t t-if="record.status.raw_value == 'pending'">
+                                <div>
+                                    Priority:
 
-                                <t t-if="record.priority.raw_value == 'low'">
-                                    <span class="text-success">Low</span>
-                                </t>
+                                    <t t-if="record.priority.raw_value == 'low'">
+                                        <span class="text-success">Low</span>
+                                    </t>
 
-                                <t t-elif="record.priority.raw_value == 'medium'">
-                                    <span class="text-warning">Medium</span>
-                                </t>
+                                    <t t-elif="record.priority.raw_value == 'medium'">
+                                        <span class="text-warning">Medium</span>
+                                    </t>
 
-                                <t t-else="">
-                                    <span class="text-danger">High</span>
-                                </t>
-                            </div>
+                                    <t t-else="">
+                                        <span class="text-danger">High</span>
+                                    </t>
+                                </div>
 
-                            <div t-if="record.due_date.raw_value">
-                                Due Date:
-                                <field name="due_date"/>
-                            </div>
+                                <!-- <div t-if="record.due_date.raw_value">
+                                    Due Date:
+                                    <field name="due_date"/>
+                                </div>
 
-                            <div t-else="">
-                                No due date
-                            </div>
+                                <div t-else="">
+                                    No due date
+                                </div> -->
+
+                                <div>
+                                    <t t-if="record.due_status.raw_value == 'overdue'">
+                                        <span class="text-danger">
+                                            Overdue:
+                                            <field name="due_date"/>
+                                        </span>
+                                    </t>
+
+                                    <t t-elif="record.due_status.raw_value == 'today'">
+                                        <span class="text-warning">
+                                            Due today
+                                        </span>
+                                    </t>
+
+                                    <t t-elif="record.due_status.raw_value == 'future'">
+                                        <span class="text-success text-bf">
+                                            Due:
+                                            <field name="due_date"/>
+                                        </span>
+                                    </t>
+
+                                    <t t-else="">
+                                        <span>
+                                            No due date
+                                        </span>
+                                    </t>
+                                </div>
+                            </t>
 
                             <div>
                                 <field name="description"/>
                             </div>
-                            
+
                         </div>
                     </t>
                 </templates>
@@ -81,8 +112,13 @@
                     decoration-success="priority == 'low'"
                     decoration-warning="priority == 'medium'"
                     decoration-danger="priority == 'high'"/> 
-                <field name="due_date"/> 
-                <field name="description"/> 
+                <field name="due_status" column_invisible="True"/>
+                <field name="due_date"
+                    decoration-danger="due_status == 'overdue'"
+                    decoration-warning="due_status == 'today'"
+                    decoration-success="due_status == 'future'"
+                />
+                <field name="description" column_invisible="True"/> 
                 <field name="status"/>
             </tree>
         </field>
