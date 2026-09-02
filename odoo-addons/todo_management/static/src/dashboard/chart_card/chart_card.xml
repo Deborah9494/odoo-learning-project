@@ -2,9 +2,7 @@
 <templates xml:space="preserve">
     <t t-name="todo_management.ChartCard">
 
-        <div
-            class="o_todo_card"
-        >
+        <div>
             <div class="o_todo_card_body">
                 <div class="o_todo_card_title">
                     <t t-esc="props.title"/>

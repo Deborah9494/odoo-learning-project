@@ -3,7 +3,6 @@
     <t t-name="todo_management.NumberCard">
 
         <div
-            class="o_todo_card"
             t-on-click="() => props.onClick(props.domain)"
         >
             <div class="o_todo_card_body">

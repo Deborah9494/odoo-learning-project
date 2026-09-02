@@ -9,6 +9,7 @@ export const items = [
         id: "total_tasks",
         description: "Total number of tasks",
         Component: NumberCard,
+        size: 1,
         props: (data, openTasks) => ({
             title: "Total Tasks",
             value: data.total,
@@ -21,6 +22,7 @@ export const items = [
         id: "pending_tasks",
         description: "Number of pending tasks",
         Component: NumberCard,
+        size: 1,
         props: (data, openTasks) => ({
             title: "Pending",
             value: data.pending,
@@ -33,6 +35,7 @@ export const items = [
         id: "completed_tasks",
         description: "Number of completed tasks",
         Component: NumberCard,
+        size: 1,
         props: (data, openTasks) => ({
             title: "Completed",
             value: data.completed,
@@ -42,9 +45,23 @@ export const items = [
         }),
     },
     {
+        id: "duetoday_tasks",
+        description: "Number of due today tasks",
+        Component: NumberCard,
+        size: 1,
+        props: (data, openTasks) => ({
+            title: "Due Today",
+            value: data.due_today,
+            domain: "duetoday",
+            onClick: openTasks,
+            className: "text-warning",
+        }),
+    },
+    {
         id: "overdue_tasks",
         description: "Number of overdue tasks",
         Component: NumberCard,
+        size: 1,
         props: (data, openTasks) => ({
             title: "Overdue",
             value: data.overdue,
@@ -57,7 +74,7 @@ export const items = [
         id: "tasks_by_status",
         description: "Tasks by status",
         Component: ChartCard,
-
+        size: 2,
         props: (data, openTasks) => ({
             title: "Tasks by status",
             type: "bar",

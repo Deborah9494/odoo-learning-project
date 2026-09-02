@@ -20,18 +20,10 @@
     }
 }
 
-.o_todo_dashboard {
-    .o_todo_dashboard_cards {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1rem;
-    }
-
-    @media (max-width: 768px) {
-        .o_todo_dashboard_cards {
-            grid-template-columns: 1fr; // one column taking all available width
-        }
-    }
+.o_todo_dashboard_cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .o_todo_card {
@@ -40,6 +32,7 @@
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     cursor: pointer;
+    overflow: hidden;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -63,8 +56,13 @@
     font-weight: 600;
 }
 
-// ChartCard
 .o_todo_chart {
     height: calc(100% - 2.5rem);
     min-height: 250px;
+}
+
+@media (max-width: 768px) {
+    .o_todo_card {
+        width: 100% !important;
+    }
 }

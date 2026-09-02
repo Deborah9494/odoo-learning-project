@@ -18,9 +18,17 @@
                 </div>
 
                 <div class="o_todo_dashboard_cards">
+
                     <t t-foreach="items" t-as="item" t-key="item.id">
-                        <t t-component="item.Component" t-props="item.props"/>
+                        <TodoDashboardItem
+                            size="item.size"
+                            Component="item.Component"
+                            props="item.props"
+                        >
+                            <t t-component="item.Component" t-props="item.props"/>
+                        </TodoDashboardItem>
                     </t>
+
                 </div>
 
             </div>

@@ -186,6 +186,16 @@
         </field>
     </record>
 
+    <!-- Due today tasks -->
+    <record id="todo_item_action_duetoday" model="ir.actions.act_window">
+        <field name="name">Due Today Tasks</field>
+        <field name="res_model">todo.item</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">
+            [('status', '=', 'pending'), ('due_date', '=', context_today())]
+        </field>
+    </record>
+
     <menuitem
         id="todo_item_menu"
         name="Tasks"

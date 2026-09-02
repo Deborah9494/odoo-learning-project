@@ -78,6 +78,10 @@ class TodoItem(models.Model):
                 ("status", "=", "pending"),
                 ("due_date", "<", today),
             ]),
+            "due_today": self.search_count([
+                ("status", "=", "pending"),
+                ("due_date", "=", today),
+            ]),
             "status_data": {
                 "Pending": self.search_count([
                     ("status", "=", "pending")

@@ -4,12 +4,14 @@ import { Component, onWillStart } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { registry } from "@web/core/registry";
 import { Layout } from "@web/search/layout";
+import { TodoDashboardItem } from "./todo_dashboard_item/todo_dashboard_item";
 
 export class TodoDashboard extends Component {
     static template = "todo_management.TodoDashboard";
 
     static components = {
         Layout,
+        TodoDashboardItem
     };
 
     setup() {
@@ -24,6 +26,7 @@ export class TodoDashboard extends Component {
             pending: 0,
             completed: 0,
             overdue: 0,
+            due_today: 0,
         };
         this.items = registry.category("todo_dashboard").getAll();
         onWillStart(async () => {
@@ -53,6 +56,8 @@ export class TodoDashboard extends Component {
             this.action.doAction("todo_management.todo_item_action_completed");
         } else if (type === "overdue") {
             this.action.doAction("todo_management.todo_item_action_overdue");
+        } else if (type === "duetoday"){
+            this.action.doAction("todo_management.todo_item_action_duetoday");
         } else {
             this.action.doAction("todo_management.todo_item_action_all");
         }
