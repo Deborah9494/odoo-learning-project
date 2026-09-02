@@ -1,6 +1,7 @@
 /** @odoo-module **/
 
 import { NumberCard } from "./number_card/number_card";
+import { ChartCard } from "./chart_card/chart_card";
 import { registry } from "@web/core/registry";
 
 export const items = [
@@ -50,6 +51,26 @@ export const items = [
             domain: "overdue",
             onClick: openTasks,
             className: "text-danger",
+        }),
+    },
+    {
+        id: "tasks_by_status",
+        description: "Tasks by status",
+        Component: ChartCard,
+
+        props: (data, openTasks) => ({
+            title: "Tasks by status",
+            type: "bar",
+            data: data.status_data,
+
+            onItemClick: (label) => {
+                const actions = {
+                    Pending: "pending",
+                    Completed: "completed",
+                };
+
+                openTasks(actions[label]);
+            },
         }),
     },
 ];

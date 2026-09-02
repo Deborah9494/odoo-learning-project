@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="todo_management.ChartCard">
+
+        <div
+            class="o_todo_card"
+        >
+            <div class="o_todo_card_body">
+                <div class="o_todo_card_title">
+                    <t t-esc="props.title"/>
+                </div>
+
+                <div 
+                    t-att-class="'o_todo_chart d-flex align-items-center justify-content-center ' + (props.className || '')"
+                >
+                    <ChartComponent
+                        type="props.type"
+                        label="props.title"
+                        data="props.data"
+                        onItemClick="props.onItemClick"
+                    />
+                </div>
+            </div>
+        </div>
+
+    </t>
+</templates>
