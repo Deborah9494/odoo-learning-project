@@ -58,6 +58,12 @@ export class TodoDashboard extends Component {
             this.action.doAction("todo_management.todo_item_action_overdue");
         } else if (type === "duetoday"){
             this.action.doAction("todo_management.todo_item_action_duetoday");
+        } else if (type === "pending_low"){
+            this.action.doAction("todo_management.todo_item_action_pending_low");
+        } else if (type === "pending_medium"){
+            this.action.doAction("todo_management.todo_item_action_pending_medium");
+        } else if (type === "pending_high"){
+            this.action.doAction("todo_management.todo_item_action_pending_high");
         } else {
             this.action.doAction("todo_management.todo_item_action_all");
         }

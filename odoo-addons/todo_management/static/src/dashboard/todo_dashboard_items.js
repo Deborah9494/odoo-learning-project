@@ -19,32 +19,6 @@ export const items = [
         }),
     },
     {
-        id: "pending_tasks",
-        description: "Number of pending tasks",
-        Component: NumberCard,
-        size: 1,
-        props: (data, openTasks) => ({
-            title: "Pending",
-            value: data.pending,
-            domain: "pending",
-            onClick: openTasks,
-            className: "text-warning",
-        }),
-    },
-    {
-        id: "completed_tasks",
-        description: "Number of completed tasks",
-        Component: NumberCard,
-        size: 1,
-        props: (data, openTasks) => ({
-            title: "Completed",
-            value: data.completed,
-            domain: "completed",
-            onClick: openTasks,
-            className: "text-success",
-        }),
-    },
-    {
         id: "duetoday_tasks",
         description: "Number of due today tasks",
         Component: NumberCard,
@@ -77,13 +51,34 @@ export const items = [
         size: 2,
         props: (data, openTasks) => ({
             title: "Tasks by status",
-            type: "bar",
+            type: "pie",
             data: data.status_data,
 
             onItemClick: (label) => {
                 const actions = {
                     Pending: "pending",
                     Completed: "completed",
+                };
+
+                openTasks(actions[label]);
+            },
+        }),
+    },
+    {
+        id: "pending_tasks_by_priority",
+        description: "Pending Tasks by priority",
+        Component: ChartCard,
+        size: 2,
+        props: (data, openTasks) => ({
+            title: "Pending Tasks by priority",
+            type: "bar",
+            data: data.priority_data,
+
+            onItemClick: (label) => {
+                const actions = {
+                    Low: "pending_low",
+                    Medium: "pending_medium",
+                    High: "pending_high",
                 };
 
                 openTasks(actions[label]);

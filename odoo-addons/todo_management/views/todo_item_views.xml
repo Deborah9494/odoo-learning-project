@@ -196,6 +196,36 @@
         </field>
     </record>
 
+    <!-- Pending low -->
+    <record id="todo_item_action_pending_low" model="ir.actions.act_window">
+        <field name="name">Pending Tasks with low priority</field>
+        <field name="res_model">todo.item</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">
+            [('status', '=', 'pending'), ('priority', '=', 'low')]
+        </field>
+    </record>
+
+    <!-- Pending medium -->
+    <record id="todo_item_action_pending_medium" model="ir.actions.act_window">
+        <field name="name">Pending Tasks with medium priority</field>
+        <field name="res_model">todo.item</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">
+            [('status', '=', 'pending'), ('priority', '=', 'medium')]
+        </field>
+    </record>
+
+    <!-- Pending high -->
+    <record id="todo_item_action_pending_high" model="ir.actions.act_window">
+        <field name="name">Pending Tasks with high priority</field>
+        <field name="res_model">todo.item</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">
+            [('status', '=', 'pending'), ('priority', '=', 'high')]
+        </field>
+    </record>
+
     <menuitem
         id="todo_item_menu"
         name="Tasks"

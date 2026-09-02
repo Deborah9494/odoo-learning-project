@@ -90,4 +90,18 @@ class TodoItem(models.Model):
                     ("status", "=", "completed")
                 ]),
             },
+            "priority_data": {
+                "Low": self.search_count([
+                    ("status", "=", "pending"),
+                    ("priority", "=", "low"),
+                ]),
+                "Medium": self.search_count([
+                    ("status", "=", "pending"),
+                    ("priority", "=", "medium"),
+                ]),
+                "High": self.search_count([
+                    ("status", "=", "pending"),
+                    ("priority", "=", "high"),
+                ]),
+            },
         }

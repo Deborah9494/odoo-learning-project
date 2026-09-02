@@ -67,6 +67,11 @@ export class ChartComponent extends Component {
                 ],
             },
             options: {
+                plugins: {
+                    legend: {
+                        display: this.props.type === "pie",
+                    },
+                },
                 onClick: (event, elements) => {
                     if (!elements.length) {
                         return;
