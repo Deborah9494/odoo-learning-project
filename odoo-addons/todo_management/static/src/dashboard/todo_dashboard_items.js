@@ -85,6 +85,32 @@ export const items = [
             },
         }),
     },
+    {
+        id: "pending_tasks",
+        description: "Number of pending tasks",
+        Component: NumberCard,
+        size: 1,
+        props: (data, openTasks) => ({
+            title: "Pending",
+            value: data.pending,
+            domain: "pending",
+            onClick: openTasks,
+            className: "text-warning",
+        }),
+    },
+    {
+        id: "completed_tasks",
+        description: "Number of completed tasks",
+        Component: NumberCard,
+        size: 1,
+        props: (data, openTasks) => ({
+            title: "Completed",
+            value: data.completed,
+            domain: "completed",
+            onClick: openTasks,
+            className: "text-success",
+        }),
+    },
 ];
 
 const dashboardRegistry = registry.category("todo_dashboard");

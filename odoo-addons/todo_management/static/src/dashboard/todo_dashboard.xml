@@ -10,6 +10,12 @@
                 </button>
             </t>
 
+            <t t-set-slot="control-panel-additional-actions">
+                <button t-on-click="openConfiguration" class="btn p-0 ms-1 border-0">
+                    <i class="fa fa-cog"></i>
+                </button>
+            </t>
+
             <div class="o_todo_dashboard_content">
 
                 <div class="o_todo_dashboard_header">
@@ -20,10 +26,9 @@
                 <div class="o_todo_dashboard_cards">
 
                     <t t-foreach="items" t-as="item" t-key="item.id">
-                        <TodoDashboardItem
-                            size="item.size"
-                            Component="item.Component"
-                            props="item.props"
+                        <TodoDashboardItem 
+                            t-if="!state.disabledItems.includes(item.id)"
+                            size="item.size || 1"
                         >
                             <t t-component="item.Component" t-props="item.props"/>
                         </TodoDashboardItem>

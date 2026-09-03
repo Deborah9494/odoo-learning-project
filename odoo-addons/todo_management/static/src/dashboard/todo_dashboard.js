@@ -1,17 +1,20 @@
 /** @odoo-module */
 
-import { Component, onWillStart } from "@odoo/owl";
+import { Component, onWillStart, useState } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { registry } from "@web/core/registry";
 import { Layout } from "@web/search/layout";
 import { TodoDashboardItem } from "./todo_dashboard_item/todo_dashboard_item";
+
+import { browser } from "@web/core/browser/browser";
+import { ConfigurationDialog } from "./todo_dashboard_settings/todo_dashboard_settings";
 
 export class TodoDashboard extends Component {
     static template = "todo_management.TodoDashboard";
 
     static components = {
         Layout,
-        TodoDashboardItem
+        TodoDashboardItem,
     };
 
     setup() {
@@ -19,8 +22,11 @@ export class TodoDashboard extends Component {
         this.display = {
             controlPanel: {},
         };
+        
         this.action = useService("action");
         this.orm = useService("orm");
+        this.dialog = useService("dialog");
+
         this.data = {
             total: 0,
             pending: 0,
@@ -29,6 +35,7 @@ export class TodoDashboard extends Component {
             due_today: 0,
         };
         this.items = registry.category("todo_dashboard").getAll();
+
         onWillStart(async () => {
             this.data = await this.orm.call(
                 "todo.item",
@@ -43,6 +50,38 @@ export class TodoDashboard extends Component {
                 ),
             }));
         });
+
+        // Read the IDs of disabled items from localStorage. 
+        // If nothing has been saved yet, use [].
+        // Why useState? Because we want the dashboard to 
+        //  react when disabledItems changes.
+        this.state = useState({
+            disabledItems: 
+                browser.localStorage
+                    .getItem("disabledDashboardItems")?.split(",") || []
+        });
+
+    }
+
+
+    // Open the configuration dialog, passing:
+    // - all dashboard items
+    // - the IDs currently disabled
+    // - a function the dialog can call when the configuration changes
+    openConfiguration() {
+        this.dialog.add(ConfigurationDialog, {
+            items: this.items,
+            disabledItems: this.state.disabledItems,
+            onUpdateConfiguration: 
+                this.updateConfiguration.bind(this),
+        })
+    }
+
+    // Update the reactive state of the Dashboard.
+    // Because state was created with useState(),
+    // Owl notices this change and rerenders the Dashboard.
+    updateConfiguration(newDisabledItems) {
+        this.state.disabledItems = newDisabledItems;
     }
 
     openUsers() {
