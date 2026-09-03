@@ -47,6 +47,30 @@ class TodoItem(models.Model):
         compute="_compute_due_status",
     )
 
+    def action_toggle_status(self):
+        for item in self:
+            item.status = (
+                "completed"
+                if item.status == "pending"
+                else "pending"
+            )
+
+    # is_completed = fields.Boolean(
+    #     string="Done",
+    #     compute="_compute_is_completed",
+    #     inverse="_inverse_is_completed",
+    # )
+
+    # @api.depends("status")
+    # def _compute_is_completed(self):
+    #     for item in self:
+    #         item.is_completed = item.status == "completed"
+
+    # def _inverse_is_completed(self):
+    #     for item in self:
+    #         item.status = "completed" if item.is_completed else "pending"
+
+
     @api.depends("due_date", "status")
     def _compute_due_status(self):
         today = fields.Date.today()

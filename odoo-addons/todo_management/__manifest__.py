@@ -14,6 +14,7 @@
     "assets": {
         "web.assets_backend": [
             "todo_management/static/src/dashboard/**/*",
+            "todo_management/static/src/css/**/*",
         ],
     },
     "installable": True,       # Se puede instalar

@@ -37,8 +37,29 @@ export class ChartComponent extends Component {
 
         // Update the existing chart when the data props change
         onWillUpdateProps((nextProps) => {
-            this.chart.data.labels = Object.keys(nextProps.data);
-            this.chart.data.datasets[0].data = Object.values(nextProps.data);
+            if (nextProps.data.labels && nextProps.data.datasets) {
+                this.chart.data.labels = nextProps.data.labels;
+
+                this.chart.data.datasets = nextProps.data.datasets.map(
+                    (dataset, index) => ({
+                        ...dataset,
+                        backgroundColor: getColor(index),
+                    })
+                );
+            } else {
+                this.chart.data.labels = Object.keys(nextProps.data);
+
+                this.chart.data.datasets = [
+                    {
+                        label: nextProps.label,
+                        data: Object.values(nextProps.data),
+                        backgroundColor: this.chart.data.labels.map(
+                            (_, index) => getColor(index)
+                        ),
+                    },
+                ];
+            }
+
             this.chart.update();
         });
 
@@ -48,41 +69,65 @@ export class ChartComponent extends Component {
         });
     }
 
-    renderChart(){
+    renderChart() {
         console.log(this.props.data);
-        const labels = Object.keys(this.props.data);
-        const data = Object.values(this.props.data);
-        const color = labels.map((_, index) => getColor(index)); // Creates an array of colors by assigning each label a color from Odoo’s standard color palette.
+
+        let labels;
+        let datasets;
+
+        if (this.props.data.labels && this.props.data.datasets) {
+            // Multiple datasets
+            labels = this.props.data.labels;
+            datasets = this.props.data.datasets.map((dataset, index) => ({
+                ...dataset,
+                backgroundColor: getColor(index),
+            }));
+        } else {
+            // Single dataset — existing charts
+            labels = Object.keys(this.props.data);
+            const data = Object.values(this.props.data);
+
+            datasets = [
+                {
+                    label: this.props.label,
+                    data: data,
+                    backgroundColor: labels.map((_, index) => getColor(index)),
+                },
+            ];
+        }
 
         this.chart = new Chart(this.canvasRef.el, {
             type: this.props.type,
+
             data: {
                 labels: labels,
-                datasets: [
-                    {
-                        label: this.props.label,
-                        data: data,
-                        backgroundColor: color,
-                    },
-                ],
+                datasets: datasets,
             },
+
             options: {
                 plugins: {
                     legend: {
-                        display: this.props.type === "pie",
+                        display: this.props.type === "pie"
+                            || datasets.length > 1,
                     },
                 },
+
                 onClick: (event, elements) => {
                     if (!elements.length) {
                         return;
                     }
 
-                    // which section was clicked
-                    const index = elements[0].index;
-                    // label of the cliked section
+                    const element = elements[0];
+
+                    const index = element.index;
+                    const datasetIndex = element.datasetIndex;
+
                     const label = this.chart.data.labels[index];
-                    // calls the function supplied by ChartCard
-                    this.props.onItemClick?.(label);
+
+                    this.props.onItemClick?.(
+                        label,
+                        datasetIndex
+                    );
                 },
             },
         });
