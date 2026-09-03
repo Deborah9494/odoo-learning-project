@@ -70,20 +70,44 @@ export class ChartComponent extends Component {
     }
 
     renderChart() {
-        console.log(this.props.data);
+        // console.log(this.props.data);
 
         let labels;
         let datasets;
 
         if (this.props.data.labels && this.props.data.datasets) {
             // Multiple datasets
+            /*
+                {
+                    labels: ["Project A", "Project B", "Project C"],
+
+                    datasets: [
+                        {
+                            label: "Pending",
+                            data: [3, 0, 2],
+                        },
+                        {
+                            label: "Completed",
+                            data: [0, 0, 1],
+                        },
+                    ],
+                }
+            */
             labels = this.props.data.labels;
             datasets = this.props.data.datasets.map((dataset, index) => ({
                 ...dataset,
                 backgroundColor: getColor(index),
             }));
         } else {
-            // Single dataset — existing charts
+            // Single dataset
+            /*
+            {
+                Low: 3,
+                Medium: 5,
+                High: 2
+            }
+            */
+
             labels = Object.keys(this.props.data);
             const data = Object.values(this.props.data);
 
