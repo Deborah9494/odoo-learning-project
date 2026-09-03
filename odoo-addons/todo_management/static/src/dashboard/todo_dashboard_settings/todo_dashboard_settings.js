@@ -43,10 +43,11 @@ export class ConfigurationDialog extends Component {
             .map((item) => item.id);
 
         // Save the disabled IDs in the browser.
-        browser.localStorage.setItem(
-            "disabledDashboardItems",
-            newDisabledItems,
-        );
+        // browser.localStorage.setItem(
+        //     "disabledDashboardItems",
+        //     newDisabledItems,
+        // );
+
         // Tell the Dashboard that the configuration changed.
         this.props.onUpdateConfiguration(newDisabledItems);
     }

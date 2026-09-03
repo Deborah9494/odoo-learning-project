@@ -22,7 +22,7 @@ export class TodoDashboard extends Component {
         this.display = {
             controlPanel: {},
         };
-        
+
         this.action = useService("action");
         this.orm = useService("orm");
         this.dialog = useService("dialog");
@@ -35,6 +35,17 @@ export class TodoDashboard extends Component {
             due_today: 0,
         };
         this.items = registry.category("todo_dashboard").getAll();
+
+        // Read the IDs of disabled items from localStorage. 
+        // If nothing has been saved yet, use [].
+        // Why useState? Because we want the dashboard to 
+        //  react when disabledItems changes.
+        this.state = useState({
+            disabledItems: [],
+            // disabledItems: 
+            //     browser.localStorage
+            //         .getItem("disabledDashboardItems")?.split(",") || []
+        });
 
         onWillStart(async () => {
             this.data = await this.orm.call(
@@ -49,16 +60,15 @@ export class TodoDashboard extends Component {
                     this.openTasks.bind(this)
                 ),
             }));
-        });
+            
+            const disabledItems = await this.orm.call(
+                "res.users",
+                "get_todo_dashboard_configuration",
+                []
+            );
 
-        // Read the IDs of disabled items from localStorage. 
-        // If nothing has been saved yet, use [].
-        // Why useState? Because we want the dashboard to 
-        //  react when disabledItems changes.
-        this.state = useState({
-            disabledItems: 
-                browser.localStorage
-                    .getItem("disabledDashboardItems")?.split(",") || []
+            this.state.disabledItems = disabledItems;
+
         });
 
     }
@@ -80,8 +90,14 @@ export class TodoDashboard extends Component {
     // Update the reactive state of the Dashboard.
     // Because state was created with useState(),
     // Owl notices this change and rerenders the Dashboard.
-    updateConfiguration(newDisabledItems) {
+    async updateConfiguration(newDisabledItems) {
         this.state.disabledItems = newDisabledItems;
+
+        await this.orm.call(
+            "res.users",
+            "set_todo_dashboard_configuration",
+            [newDisabledItems]
+        );
     }
 
     openUsers() {
