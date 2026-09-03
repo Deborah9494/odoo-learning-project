@@ -1,6 +1,7 @@
 /** @odoo-module **/
 
 import { Component, onWillStart } from "@odoo/owl";
+import { Layout } from "@web/search/layout";
 import { useService } from "@web/core/utils/hooks";
 import { registry } from "@web/core/registry";
 
@@ -11,11 +12,17 @@ export class ProjectDashboard extends Component {
     static template = "todo_management.ProjectDashboard";
 
     static components = {
+        Layout,
         ChartCard,
         TodoDashboardItem,
     };
 
     setup() {
+
+        this.display = {
+            controlPanel: {},
+        };
+
         this.orm = useService("orm");
 
         this.data = {

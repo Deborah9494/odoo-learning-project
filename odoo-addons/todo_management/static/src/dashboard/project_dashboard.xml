@@ -2,17 +2,28 @@
 <templates xml:space="preserve">
 
     <t t-name="todo_management.ProjectDashboard">
-        <div class="o_todo_project_dashboard">
-            
-            <TodoDashboardItem size="2">
-                <ChartCard
-                    title="'Tasks by project'"
-                    type="'bar'"
-                    data="data"
-                />
-            </TodoDashboardItem>
+        <Layout display="display" className="'o_todo_dashboard h-100'">
 
-        </div>
+            <div class="o_todo_dashboard_content">
+
+                <div class="o_todo_dashboard_header">
+                    <h2>Project Dashboard</h2>
+                    <p>Overview of your tasks by project</p>
+                </div>
+
+                <div class="o_todo_dashboard_cards">
+                    <TodoDashboardItem size="2">
+                        <ChartCard
+                            title="'Tasks by project'"
+                            type="'bar'"
+                            data="data"
+                        />
+                    </TodoDashboardItem>
+                </div>
+
+            </div>
+
+        </Layout>
     </t>
 
 </templates>

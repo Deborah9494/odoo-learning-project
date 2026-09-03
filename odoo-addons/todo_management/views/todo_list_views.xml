@@ -146,7 +146,7 @@
 
     <menuitem
         id="todo_project_dashboard_menu"
-        name="Project Dashboard"
+        name="Projects Dashboard"
         parent="todo_menu_root"
         action="todo_project_dashboard_action"
     />
