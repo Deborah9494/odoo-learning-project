@@ -1,14 +1,20 @@
 /** @odoo-module */
-import { Component, useState } from "@odoo/owl";
+import { Component } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { useClicker } from "../clicker_hook";
+import { ClickerValue } from "../clicker_value/clicker_value";
+
 export class ClickerSystray extends Component {
     static template = "awesome_clicker.ClickerSystray";
     static props = {};
+    static components = {
+        ClickerValue
+    };
     setup() {
         this.action = useService("action");
         // get the service and make the reactive service state available to the component
-        this.clickService = useState(useService("awesome_clicker.clicker"));
+        this.clicker = useClicker();
     }
     openClientAction() {
         this.action.doAction({

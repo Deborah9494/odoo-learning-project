@@ -1,10 +1,11 @@
 /** @odoo-module */
 import { registry } from "@web/core/registry";
 import { reactive } from "@odoo/owl";
+
 // Odoo service
 const clickerService = {
     start(env) {
-        const state = reactive({ clicks: 0 });
+        const state = reactive({ clicks: 950 });
         function increment(inc) {
             state.clicks += inc;
         }
