@@ -1,25 +1,20 @@
 /** @odoo-module */
 import { registry } from "@web/core/registry";
-import { reactive } from "@odoo/owl";
+import { ClickerModel } from "./clicker_model";
 
 // Odoo service
 const clickerService = {
-    start(env) {
-        const state = reactive({ clicks: 950 });
-        function increment(inc) {
-            state.clicks += inc;
-        }
-        // service itself is listening for global clicks
-        document.addEventListener(
-            "click", 
-            () => increment(1), 
-            true 
-        );
-        // Components using this service are allowed to access state and increment
-        return {
-            state,
-            increment,
-        };       
+    dependencies: ["effect"],
+    start(env, { effect }) {
+        const clickerModel = new ClickerModel();
+        const bus = clickerModel.bus;
+        bus.addEventListener("MILESTONE_1k", () => {
+            effect.add({
+                message: "Milestone reached! You can now buy clickbots",
+                type: "rainbow_man",
+            });
+        });
+        return clickerModel;
     },
 };
 registry.category("services").add(

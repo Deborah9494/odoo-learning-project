@@ -1,11 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="awesome_clicker.ClickerClientAction">
-         <div class="ms-1 mt-1">
-            Clicks: <ClickerValue/>
-            <button class="btn btn-primary ms-1" t-on-click="() => this.clicker.increment(9)">
-                Increment
-            </button>
+         <div class="m-2">
+            <div>
+                Clicks: <ClickerValue/>
+                <button class="btn btn-primary ms-1" t-on-click="() => this.clicker.increment(9)">
+                    Increment
+                </button>
+            </div>
+            <div t-if="this.clicker.level >= 1" class="ms-1 mt-1">
+                <h2>
+                    Bots
+                </h2> 
+                
+                <div class="d-flex flex-row">
+                    <div class="card me-3">
+                        <div class="card-header">
+                            <t t-esc="this.clicker.clickBots"/>x clickbots (10 clicks/10seconds)<i class="fa fa-android"></i>
+                        </div>
+                        <div class="card-body">
+                            <button
+                                class="btn btn-primary"
+                                t-att-disabled="this.clicker.clicks lt 1000"
+                                t-on-click="() => this.clicker.buyClickBot()"
+                            >
+                                Buy blickbot (1000 clicks)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card me-3" t-if="this.clicker.level >= 2">
+                        <div class="card-header">
+                            <t t-esc="this.clicker.bigBots"/>x bigbots (100 clicks/10seconds)<i class="fa fa-android"></i>
+                        </div>
+                        <div class="card-body">
+                            <button
+                                class="btn btn-primary"
+                                t-att-disabled="this.clicker.clicks lt 5000"
+                                t-on-click="() => this.clicker.buyBigBot()"
+                            >
+                                Buy bigbot (5000 clicks)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
         </div>
+
     </t>
 </templates>
