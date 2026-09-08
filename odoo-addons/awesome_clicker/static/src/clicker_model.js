@@ -6,11 +6,13 @@ export class ClickerModel extends Reactive {
     
     constructor() {
         super();
-        this.clicks = 10950; // current number of clicks
+        this.clicks = 99000; // current number of clicks
         this.level= 0; // will be incremented at some milestones, and open new features
         
         // this.clickBots = 0; // the number of robots that have been purchased
         // this.bigBots = 0;
+
+        this.power = 1;
 
         this.bus = new EventBus();
 
@@ -29,14 +31,17 @@ export class ClickerModel extends Reactive {
             }
         }
 
-        document.addEventListener("click", () => this.increment(1), true);
+        document.addEventListener("click", () => this.increment(900), true);
 
         // arrow function: because we want this to continue referring to the ClickerModel instance.
         setInterval(() => {
             // this.clicks += this.clickBots * 10;
             // this.clicks += this.bigBots * 100;
             for (const bot in this.bots) {
-                this.clicks += this.bots[bot].increment * this.bots[bot].purchased;
+                this.clicks += 
+                    this.bots[bot].increment * 
+                    this.bots[bot].purchased * 
+                    this.power;
             }
         }, 10000);
     }
@@ -99,11 +104,21 @@ export class ClickerModel extends Reactive {
         this.bots[name].purchased += 1;
     }
 
+    buyPower(){
+        const powerPrice = 50000;
+        if (this.clicks < powerPrice){
+            return false;
+        }
+        this.clicks -= powerPrice;
+        this.power += 1;
+    }
+
     
     get milestones() {
         return [
             { clicks: 1000, unlock: "clickBot" },
             { clicks: 5000, unlock: "bigBot" },
+            { clicks: 100000, unlock: "power" },
         ];
     }   
 

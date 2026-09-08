@@ -48,7 +48,7 @@
                         <!-- bot_value is the special variable Owl provides for the value associated with the current bot when iterating over an object -->
                         <div t-if="bot_value.level lte this.clicker.level" class="card me-3">
                             <div class="card-header">
-                                <t t-esc="bot_value.purchased"/>x <t t-esc="bot"/> (<t t-esc="bot_value.increment"/> clicks/10seconds)
+                                <t t-esc="bot_value.purchased"/>x <t t-esc="bot"/> (<t t-esc="bot_value.increment * this.clicker.power"/> clicks/10seconds)
                                 <i class="fa fa-android"></i>
                             </div>
                             <div class="card-body">
@@ -62,6 +62,31 @@
 
                 
             </div>
+
+
+            <div t-if="this.clicker.level >= 3" class="ms-1 mt-1">
+                <h2>Power multiplier</h2>
+                <div class="d-flex flex-row">
+                    <div class="card me-3">
+                        <div class="card-header">
+                            <t t-esc="this.clicker.power"/>x<i class="fa fa-superpowers"></i>
+                        </div>
+                        <div class="card-body">
+                            <button
+                            t-on-click="() => this.clicker.buyPower()"
+                            class="btn btn-primary"
+                            t-att-disabled="this.clicker.clicks lt 50000"
+                            >
+                                Buy Power (50000 clicks)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+
+
         </div>
     </t>
 </templates>
