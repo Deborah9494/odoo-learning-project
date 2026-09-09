@@ -1,6 +1,9 @@
 /** @odoo-module */
 import { Reactive } from "@web/core/utils/reactive";
 import { EventBus } from "@odoo/owl";
+import { rewards } from "./click_rewards";
+import { choose } from "./utils";
+
 
 export class ClickerModel extends Reactive {
     
@@ -8,14 +11,7 @@ export class ClickerModel extends Reactive {
         super();
         this.clicks = 99000; // current number of clicks
         this.level= 0; // will be incremented at some milestones, and open new features
-        
-        // this.clickBots = 0; // the number of robots that have been purchased
-        // this.bigBots = 0;
-
-        this.power = 1;
-
         this.bus = new EventBus();
-
         this.bots = {
             clickbot: {
                 price: 1000,
@@ -30,13 +26,10 @@ export class ClickerModel extends Reactive {
                 purchased: 0,
             }
         }
-
+        this.power = 1;
         document.addEventListener("click", () => this.increment(900), true);
-
         // arrow function: because we want this to continue referring to the ClickerModel instance.
         setInterval(() => {
-            // this.clicks += this.clickBots * 10;
-            // this.clicks += this.bigBots * 100;
             for (const bot in this.bots) {
                 this.clicks += 
                     this.bots[bot].increment * 
@@ -48,49 +41,20 @@ export class ClickerModel extends Reactive {
     
     increment(inc) {
         this.clicks += inc;
-        // if (this.level < 1 && this.clicks >= 1000) {
-        //     // Update the clicker model to instantiate a bus, and to trigger a MILESTONE_1k event when we reach 1000 clicks for the first time.
-        //     this.bus.trigger("MILESTONE_1k");
-        //     this.level++;
-        // }
-        // if (this.level < 2 && this.clicks >= 5000){
-        //     this.level++;
-        // }
         if ( this.milestones[this.level] &&
             this.clicks >= this.milestones[this.level].clicks ) {
                 this.bus.trigger(
                     "MILESTONE", 
                     this.milestones[this.level]
                         // for example: 
-                        /*
-                        {
+                        /*{
                             clicks: 1000,
                             unlock: "clickBot"
-                        }
-                        */
+                        }*/
                 );
                 this.level += 1;
         }
     }
-
-    // buyClickBot() {
-    //     const clickBotPrice = 1000;
-    //     if (this.clicks < clickBotPrice) {
-    //         return false;
-    //     }
-    //     this.clicks -= clickBotPrice;
-    //     this.clickBots += 1;
-    // }
-
-    // buyBigBot() {
-    //     const bigBotPrice = 5000;
-    //     if (this.clicks < bigBotPrice || this.level < 2) {
-    //         return false;
-    //     }
-    //     this.clicks -= bigBotPrice;
-    //     this.bigBots += 1;
-    // }
-    
 
     buyBot(name) {
         if (!Object.keys(this.bots).includes(name)) {
@@ -113,6 +77,25 @@ export class ClickerModel extends Reactive {
         this.power += 1;
     }
 
+    checkReward(reward) {
+        if (reward.minLevel !== undefined && reward.minLevel > this.level) {
+            return false;
+        }
+        if (reward.maxLevel !== undefined && reward.maxLevel < this.level) {
+            return false;
+        }
+        return true;
+    }
+
+    giveReward() {
+        const availableRewards = rewards.filter(
+            (reward) => this.checkReward(reward)
+        );
+
+        const reward = choose(availableRewards);
+        this.bus.trigger("REWARD", reward);
+        return reward;
+    }
     
     get milestones() {
         return [
