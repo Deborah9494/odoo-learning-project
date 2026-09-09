@@ -4,12 +4,16 @@ import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { useClicker } from "../clicker_hook";
 import { ClickerValue } from "../clicker_value/clicker_value";
+import { Dropdown } from "@web/core/dropdown/dropdown";
+import { DropdownItem } from "@web/core/dropdown/dropdown_item";
 
 export class ClickerSystray extends Component {
     static template = "awesome_clicker.ClickerSystray";
     static props = {};
     static components = {
-        ClickerValue
+        ClickerValue,
+        Dropdown,
+        DropdownItem,
     };
     setup() {
         this.action = useService("action");

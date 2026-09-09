@@ -1,91 +1,96 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="awesome_clicker.ClickerClientAction">
-         <div class="m-2">
+        <div class="m-2">
+        
             <div>
                 Clicks: <ClickerValue/>
                 <button class="btn btn-primary ms-1" t-on-click="() => this.clicker.increment(9)">
                     Increment
                 </button>
             </div>
-            <div t-if="this.clicker.level >= 1" class="ms-1 mt-1">
-                <h2> Bots </h2> 
-                
-                <!-- <div class="d-flex flex-row">
-                    <div class="card me-3">
-                        <div class="card-header">
-                            <t t-esc="this.clicker.clickBots"/>x clickbots (10 clicks/10seconds)<i class="fa fa-android"></i>
-                        </div>
-                        <div class="card-body">
-                            <button
-                                class="btn btn-primary"
-                                t-att-disabled="this.clicker.clicks lt 1000"
-                                t-on-click="() => this.clicker.buyClickBot()"
-                            >
-                                Buy blickbot (1000 clicks)
-                            </button>
-                        </div>
-                    </div>
 
-                    <div class="card me-3" t-if="this.clicker.level >= 2">
-                        <div class="card-header">
-                            <t t-esc="this.clicker.bigBots"/>x bigbots (100 clicks/10seconds)<i class="fa fa-android"></i>
-                        </div>
-                        <div class="card-body">
-                            <button
-                                class="btn btn-primary"
-                                t-att-disabled="this.clicker.clicks lt 5000"
-                                t-on-click="() => this.clicker.buyBigBot()"
-                            >
-                                Buy bigbot (5000 clicks)
-                            </button>
-                        </div>
-                    </div>
-                </div> -->
 
-                <div class="d-flex flex-row">
-                    <t t-foreach="this.clicker.bots" t-as="bot" t-key="bot">
-                        <!-- bot_value is the special variable Owl provides for the value associated with the current bot when iterating over an object -->
-                        <div t-if="bot_value.level lte this.clicker.level" class="card me-3">
+            <Notebook>
+            <t t-set-slot="clicks" title="'Clicks'" isVisible="this.clicker.level >= 1">
+
+                <div class="ms-1 mt-1">
+                    <h2> Bots </h2> 
+                    <div class="d-flex flex-row">
+                        <t t-foreach="this.clicker.bots" t-as="bot" t-key="bot">
+                            <!-- bot_value is the special variable Owl provides for the value associated with the current bot when iterating over an object -->
+                            <div t-if="bot_value.level lte this.clicker.level" class="card me-3">
+                                <div class="card-header">
+                                    <t t-esc="bot_value.purchased"/>x <t t-esc="bot"/> (<t t-esc="bot_value.increment * this.clicker.power"/> clicks/10seconds)
+                                    <i class="fa fa-android"></i>
+                                </div>
+                                <div class="card-body">
+                                    <button t-on-click="() => this.clicker.buyBot(bot)" class="btn btn-primary" t-att-disabled="this.clicker.clicks lt bot_value.price">
+                                        Buy <t t-esc="bot"/> (<t t-esc="bot_value.price"/> clicks)
+                                    </button>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+
+
+                <div t-if="this.clicker.level >= 3" class="ms-1 mt-1">
+                    <h2>Power multiplier</h2>
+                    <div class="d-flex flex-row">
+                        <div class="card me-3">
                             <div class="card-header">
-                                <t t-esc="bot_value.purchased"/>x <t t-esc="bot"/> (<t t-esc="bot_value.increment * this.clicker.power"/> clicks/10seconds)
-                                <i class="fa fa-android"></i>
+                                <t t-esc="this.clicker.power"/>x<i class="fa fa-superpowers"></i>
                             </div>
                             <div class="card-body">
-                                <button t-on-click="() => this.clicker.buyBot(bot)" class="btn btn-primary" t-att-disabled="this.clicker.clicks lt bot_value.price">
-                                    Buy <t t-esc="bot"/> (<t t-esc="bot_value.price"/> clicks)
+                                <button
+                                t-on-click="() => this.clicker.buyPower()"
+                                class="btn btn-primary"
+                                t-att-disabled="this.clicker.clicks lt 50000"
+                                >
+                                    Buy Power (50000 clicks)
                                 </button>
                             </div>
                         </div>
-                    </t>
+                    </div>   
                 </div>
+            </t>
 
-                
-            </div>
+            <t t-set-slot="trees" title="'Trees and Fruits'" isVisible="this.clicker.level >= 4">
+                <div class="ms-1 mt-1">
 
-
-            <div t-if="this.clicker.level >= 3" class="ms-1 mt-1">
-                <h2>Power multiplier</h2>
-                <div class="d-flex flex-row">
-                    <div class="card me-3">
-                        <div class="card-header">
-                            <t t-esc="this.clicker.power"/>x<i class="fa fa-superpowers"></i>
-                        </div>
-                        <div class="card-body">
-                            <button
-                            t-on-click="() => this.clicker.buyPower()"
-                            class="btn btn-primary"
-                            t-att-disabled="this.clicker.clicks lt 50000"
-                            >
-                                Buy Power (50000 clicks)
-                            </button>
-                        </div>
+                    <h2> Trees </h2> 
+                    <div class="d-flex flex-row">
+                        <t t-foreach="this.clicker.trees" t-as="tree" t-key="tree">
+                            <div t-if="tree_value.level lte this.clicker.level" class="card me-3">
+                                <div class="card-header">
+                                    <t t-esc="tree_value.purchased"/>x <t t-esc="tree"/> (1<t t-esc="tree_value.produce"/> /30seconds)
+                                    <i class="fa fa-tree"></i>
+                                </div>
+                                <div class="card-body">
+                                    <button t-on-click="() => this.clicker.buyTree(tree)" class="btn btn-primary" t-att-disabled="this.clicker.clicks lt tree_value.price">
+                                        Buy <t t-esc="tree"/> (<t t-esc="tree_value.price"/> clicks)
+                                    </button>
+                                </div>
+                            </div>
+                        </t>
                     </div>
+
+                    <h2> Fruits </h2> 
+                    <div class="d-flex flex-row">
+                        <t t-foreach="this.clicker.fruits" t-as="fruit" t-key="fruit">
+                            <div class="card me-3">
+                                <div class="card-header">
+                                    <t t-esc="fruit_value"/>x <t t-esc="fruit"/>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+
                 </div>
+            </t>
 
-                
-            </div>
-
+            </Notebook>
 
         </div>
     </t>
