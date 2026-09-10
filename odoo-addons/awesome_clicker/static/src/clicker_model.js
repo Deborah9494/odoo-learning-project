@@ -3,14 +3,15 @@ import { Reactive } from "@web/core/utils/reactive";
 import { EventBus } from "@odoo/owl";
 import { rewards } from "./click_rewards";
 import { choose } from "./utils";
-
+import { CURRENT_VERSION } from "./clicker_migration";
 
 export class ClickerModel extends Reactive {
     
     constructor() {
         super();
-        this.clicks = 998000; // current number of clicks
-        this.level= 3; // will be incremented at some milestones, and open new features
+        this.version = CURRENT_VERSION;
+        this.clicks = 1998000; // current number of clicks
+        this.level= 4; // will be incremented at some milestones, and open new features
         this.bus = new EventBus();
         
         this.bots = {
@@ -41,14 +42,24 @@ export class ClickerModel extends Reactive {
                 produce: "cherry",
                 purchased: 0,
             },
+            peachTree: {
+                price: 1500000,
+                level: 4,
+                produce: "peach",
+                purchased: 0,
+            },
         };
 
         this.fruits = {
             pear: 0,
             cherry: 0,
+            peach: 0,
         };
 
         this.power = 1;
+
+        
+
         document.addEventListener("click", () => this.increment(900), true);
         // arrow function: because we want this to continue referring to the ClickerModel instance.
 
@@ -151,6 +162,21 @@ export class ClickerModel extends Reactive {
             sum += this.fruits[fruit];
         }
         return sum;
+    }
+
+    // special method name in JavaScript that customizes how an object is converted to JSON when using JSON.stringify()
+    toJSON() {
+        // Object.assign(target, source) 
+        //  copies properties (not methods) from source into target
+        const json = Object.assign({}, this); 
+        delete json["bus"]; // don't save this
+        return json;
+    }
+
+    static fromJSON(json) {
+        const clicker = new ClickerModel();
+        const clickerInstance = Object.assign(clicker, json);
+        return clickerInstance;
     }
 
     get milestones() {

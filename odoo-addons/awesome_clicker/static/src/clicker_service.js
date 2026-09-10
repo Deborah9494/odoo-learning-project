@@ -1,6 +1,9 @@
 /** @odoo-module */
 import { registry } from "@web/core/registry";
 import { ClickerModel } from "./clicker_model";
+import { browser } from "@web/core/browser/browser";
+import { migrate } from "./clicker_migration";
+
 // Odoo service
 const clickerService = {
     /*
@@ -8,14 +11,29 @@ const clickerService = {
     */
     dependencies: ["effect", "action", "notification"],
     start(env, { effect, action, notification }) {
-        const clickerModel = new ClickerModel();
-        // const bus = clickerModel.bus;
-        // bus.addEventListener("MILESTONE_1k", () => {
-        //     effect.add({
-        //         message: "Milestone reached! You can now buy clickbots",
-        //         type: "rainbow_man",
-        //     });
-        // });
+        // const clickerModel = new ClickerModel();
+
+        // const localState = JSON.parse(
+        //     browser.localStorage.getItem("clickerState")
+        // );
+
+        const localState = migrate(
+            JSON.parse(browser.localStorage.getItem("clickerState"))
+        );
+
+        const clickerModel = localState 
+            ? ClickerModel.fromJSON(localState)
+            : new ClickerModel();
+
+        setInterval(() => {
+            browser.localStorage.setItem(
+                "clickerState", 
+                JSON.stringify(clickerModel)
+                // -> automatically calls toJSON()
+            );
+        }, 10000);
+
+
         const bus = clickerModel.bus;
         bus.addEventListener("MILESTONE", (ev) => {
               effect.add({
