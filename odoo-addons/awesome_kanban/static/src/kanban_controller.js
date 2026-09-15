@@ -1,5 +1,4 @@
 /** @odoo-module */
-
 import { KanbanController } from "@web/views/kanban/kanban_controller";
 import { CustomerList } from "./customer_list/customer_list";
 
