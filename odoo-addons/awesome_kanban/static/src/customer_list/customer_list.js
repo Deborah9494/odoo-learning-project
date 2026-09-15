@@ -2,9 +2,7 @@
 import { Component, onWillStart, useState } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { KeepLast } from "@web/core/utils/concurrency";
-import { fuzzyLookup } from "@web/core/utils/search";
 import { Pager } from "@web/core/pager/pager";
-
 export class CustomerList extends Component {
     static template = "awesome_kanban.CustomerList";
     static components = { Pager };
@@ -13,7 +11,6 @@ export class CustomerList extends Component {
             type: Function,
         },
     };
-
     setup(){
         this.orm = useService("orm");
         this.partners = useState({ data: [] });
@@ -26,7 +23,6 @@ export class CustomerList extends Component {
         })
 
         onWillStart(async () => {
-           // this.partners.data = await this.loadCustomers();
             const { length, records } = await this.loadCustomers();
             this.partners.data = records;
             this.pager.total = length;
@@ -34,60 +30,42 @@ export class CustomerList extends Component {
 
     }
 
-    // getter
-    get displayedPartners() {
-        return this.filterCustomers(this.state.searchString);
-    }
-
     async onChangeActiveCustomers(ev) {
         this.state.displayActiveCustomers = ev.target.checked;
-        // this.partners.data = await this.keepLast.add(this.loadCustomers());
         this.pager.offset = 0; // Whenever the filtering condition changes, start again from page 1 (first record)
-
         const { length, records } =
             await this.keepLast.add(this.loadCustomers());
-
         this.partners.data = records;
         this.pager.total = length;
-        
     }
 
-    filterCustomers(name) {
-        if (name) {
-            /*
-            Odoo JavaScript utility -> fuzzyLookup(
-                WHAT the user typed,
-                WHERE to search,
-                WHAT property to search in
-            )
-            */
-            return fuzzyLookup(name, this.partners.data, (partner) => partner.display_name);
-        } else {
-            return this.partners.data;
-        }
+    // when the user searches, reset paging
+    async onCustomerSearch() { 
+        this.pager.offset = 0; 
+        const { length, records } = 
+            await this.keepLast.add(this.loadCustomers()); 
+        this.partners.data = records; 
+        this.pager.total = length; 
     }
 
-    loadCustomers() {
+    async loadCustomers() {
         const { limit, offset } = this.pager;
-
-        const domain = this.state.displayActiveCustomers 
-            ? [["opportunity_ids", "!=", false]] 
-            : [];
-
-        // returns array of records
-        // return this.orm.searchRead(
-        //     "res.partner", 
-        //     domain, 
-        //     ["display_name"]
-        // );
-
-        // returns: 
-        /*
-            {
-                length,
-                records
-            }
-        */
+        const domain = []; 
+        // if Active customers is enabled, add that condition.
+        if (this.state.displayActiveCustomers) { 
+            domain.push(["opportunity_ids", "!=", false]); 
+        } 
+        // if the user typed something, add the search condition.
+        // if (this.state.searchString) { 
+        //     domain.push(["display_name", "ilike", this.state.searchString]); 
+        // }
+        if (this.state.searchString) {
+            domain.push(
+                "|",
+                ["name", "ilike", this.state.searchString],
+                ["parent_id.name", "ilike", this.state.searchString]
+            );
+        }
         return this.orm.webSearchRead("res.partner", domain, {
             // field specification for the records we want returned
             specification: {
@@ -102,7 +80,6 @@ export class CustomerList extends Component {
         Object.assign(this.pager, newState);
         const { records } = await this.loadCustomers();
         this.partners.data = records;
-        //this.filterCustomers(this.state.searchString);
     }
 
     

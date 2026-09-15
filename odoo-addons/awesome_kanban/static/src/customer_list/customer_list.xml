@@ -39,10 +39,12 @@
             <input 
                 class="o_input w-100" 
                 placeholder="Filter customers..."
-                t-model="state.searchString"/>
+                t-model="state.searchString"
+                t-on-input="onCustomerSearch"
+            />
         </td>
     </tr>
-    <tr t-foreach="displayedPartners" t-as="partner" t-key="partner.id" class="o_awesome_kanban_customer_hover">
+    <tr t-foreach="partners.data" t-as="partner" t-key="partner.id" class="o_awesome_kanban_customer_hover">
         <td class="cursor-pointer" t-esc="partner.display_name" t-on-click="() => props.selectCustomer(partner.id, partner.display_name)" />
     </tr>
     </tbody>
