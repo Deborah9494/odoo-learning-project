@@ -77,13 +77,13 @@ class EstatePropertyOffer(models.Model):
 
     @api.depends("validity")
     def _compute_date_deadline(self):
-        _logger.warning(">>> COMPUTE DATE DEADLINE EXECUTED <<<")
+        # _logger.warning(">>> COMPUTE DATE DEADLINE EXECUTED <<<")
         for offer in self:
             create_date = offer.create_date.date() if offer.create_date else fields.Date.today()
             offer.date_deadline = create_date + relativedelta(days=offer.validity)
 
     def _inverse_date_deadline(self):
-        _logger.warning(">>> INVERSE EXECUTED <<<")
+        # _logger.warning(">>> INVERSE EXECUTED <<<")
         for offer in self:
             create_date = offer.create_date.date() if offer.create_date else fields.Date.today()
             offer.validity = (offer.date_deadline - create_date).days

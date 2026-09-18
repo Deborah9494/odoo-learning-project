@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Properties -->
+
+    <record id="property_big_villa" model="estate.property">
+        <field name="name">Big Villa</field>
+        <field name="status">new</field>
+        <field name="description">A nice and big villa</field>
+        <field name="postcode">12345</field>
+
+        <field name="property_type_id" ref="property_type_residential"/>
+
+        <field name="date_availability">2020-02-02</field>
+        <field name="expected_price">1600000</field>
+        <field name="bedrooms">6</field>
+        <field name="living_area">100</field>
+        <field name="facades">4</field>
+        <field name="garage">True</field>
+        <field name="garden">True</field>
+        <field name="garden_area">100000</field>
+        <field name="garden_orientation">south</field>
+    </record>
+
+    <record id="property_trailer_home" model="estate.property">
+        <field name="name">Trailer home</field>
+        <field name="status">cancelled</field>
+        <field name="description">Home in a trailer park</field>
+        <field name="postcode">54321</field>
+
+        <field name="property_type_id" ref="property_type_residential"/>
+
+        <field name="date_availability">1970-01-01</field>
+        <field name="expected_price">100000</field>
+        <field name="selling_price">120000</field>
+        <field name="bedrooms">1</field>
+        <field name="living_area">10</field>
+        <field name="facades">4</field>
+        <field name="garage">False</field>
+        <field name="garden">False</field>
+        <field name="garden_area">0</field>
+    </record>
+
+    <!-- Offers -->
+    <record id="offer_big_villa_azure_10000" model="estate.property.offer">
+        <field name="price">10000</field>
+        <field name="validity">14</field>
+        <!-- <field name="partner_id" search="[('id', '=', 14)]"/> -->
+        <field name="partner_id" ref="base.res_partner_12"/>
+        <field name="property_id" ref="property_big_villa"/>
+    </record>
+
+    <record id="offer_big_villa_azure_1500000" model="estate.property.offer">
+        <field name="price">1500000</field>
+        <field name="validity">14</field>
+        <!-- <field name="partner_id" search="[('id', '=', 14)]"/> -->
+        <field name="partner_id" ref="base.res_partner_12"/>
+        <field name="property_id" ref="property_big_villa"/>
+    </record>
+
+    <record id="partner_deco_addict" model="res.partner">
+        <field name="name">Deco Addict</field>
+    </record>
+
+    <record id="offer_big_villa_deco" model="estate.property.offer">
+        <field name="price">1500001</field>
+        <field name="validity">14</field>
+        <field name="partner_id" ref="partner_deco_addict"/>
+        <field name="property_id" ref="property_big_villa"/>
+    </record>
+
+    <record id="offer_big_villa_azure_1500020" model="estate.property.offer">
+        <field name="price">1500020</field>
+        <field name="date_deadline"
+       eval="(datetime.now() + timedelta(days=10)).date()"/>
+        <!-- <field name="partner_id" search="[('id', '=', 14)]"/> -->
+        <field name="partner_id" ref="base.res_partner_12"/>
+        <field name="property_id" ref="property_big_villa"/>
+    </record>
+
+    <function model="estate.property.offer" name="action_accept">
+        <value eval="[ref('offer_big_villa_azure_1500020')]"/>
+    </function>
+
+    <record id="property_house_in_brussels" model="estate.property">
+        <field name="name">House in Brussels</field>
+        <field name="status">offer_received</field>
+        <field name="description">A house with offers created directly in the property.</field>
+        <field name="postcode">1000</field>
+        <field name="property_type_id" ref="property_type_residential"/>
+        <field name="expected_price">270000</field>
+        <field name="bedrooms">3</field>
+        <field name="living_area">120</field>
+        <field name="facades">2</field>
+        <field name="garage">True</field>
+        <field name="garden">True</field>
+
+        <field name="offer_ids" eval="[
+            Command.create({
+                'price': 280000,
+                'validity': 24,
+                'partner_id': ref('base.res_partner_12'),
+            }),
+            Command.create({
+                'price': 290000,
+                'validity': 12,
+                'partner_id': ref('partner_deco_addict'),
+            }),
+        ]"/>
+    </record>
+
+</odoo>
