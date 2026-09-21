@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- Groups -->
+
     <record id="estate_group_user" model="res.groups">
         <field name="name">Agent</field>
         <field name="category_id" ref="base.module_category_real_estate_brokerage"/>
@@ -11,6 +13,39 @@
         <field name="category_id" ref="base.module_category_real_estate_brokerage"/>
         <!-- Manager automatically has the Agent group too. -->
         <field name="implied_ids" eval="[(4, ref('estate_group_user'))]"/>
+    </record>
+
+    <!-- Record Rules -->
+
+    <record id="estate_property_rule_agent" model="ir.rule">
+        <field name="name">Estate Property: agent access</field>
+        <field name="model_id" ref="model_estate_property"/>
+        <field name="groups" eval="[Command.link(ref('estate_group_user'))]"/>
+        <field name="domain_force">
+            ['|', ('salesperson_id', '=', user.id), ('salesperson_id', '=', False)]
+            <!-- access only if the salesperson is the current user of is not set -->
+        </field>
+    </record>
+
+   
+    <record id="estate_property_rule_manager" model="ir.rule">
+        <field name="name">Estate Property: manager access</field>
+        <field name="model_id" ref="model_estate_property"/>
+        <field name="groups" eval="[Command.link(ref('estate_group_manager'))]"/>
+        <!-- every record passes the domain, access to all properties -->
+        <field name="domain_force">
+            []
+        </field>
+    </record> 
+
+    <!-- GLOBAL company rule -->
+    <!-- the user can only access properties belonging to a company he's allowed to access -->
+    <record id="estate_property_rule_company" model="ir.rule">
+        <field name="name">Estate Property: multi-company</field>
+        <field name="model_id" ref="model_estate_property"/>
+        <field name="domain_force">
+            [('company_id', 'in', company_ids)]
+        </field>
     </record>
 
 </odoo>

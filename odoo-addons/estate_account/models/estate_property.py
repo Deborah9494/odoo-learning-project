@@ -10,7 +10,14 @@ class EstateProperty(models.Model):
         _logger.warning(">>> estate_account: action_sold called <<<")
 
         for property in self:
-            self.env["account.move"].create({
+            # "Does the current user have write permission on the estate.property MODEL?"
+            self.check_access_rights("write")
+            # current user allowed to write this particular record (this particular property)?
+            property.check_access_rule("write")
+
+            _logger.warning("reached".center(100, "="))
+
+            self.env["account.move"].sudo().create({
                 "partner_id": property.buyer_id.id, # create() doesn't accept recordsets as field values. Instead of property.buyer_id --> property.buyer_id.id
                 "move_type": "out_invoice",
                 "invoice_line_ids": [

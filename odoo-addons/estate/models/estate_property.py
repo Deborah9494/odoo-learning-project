@@ -101,6 +101,12 @@ class EstateProperty(models.Model):
         compute="_compute_best_price"
     )
 
+    company_id = fields.Many2one(
+        "res.company",
+        groups="estate.estate_group_manager",
+        required=True,
+        default=lambda self: self.env.company,
+    )
 
     @api.depends("living_area", "garden_area")
     def _compute_total_area(self):
