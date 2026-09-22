@@ -4,9 +4,7 @@ from dateutil.relativedelta import relativedelta
 #from datetime import timedelta
 
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
-
-
+from odoo.exceptions import UserError, ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -121,6 +119,10 @@ class EstatePropertyOffer(models.Model):
         for vals in vals_list:
             # raise an error if the user tries to create an offer with a lower amount than an existing offer.
             offer_property = self.env["estate.property"].browse(vals["property_id"])
+
+            if offer_property.status == "sold":
+                raise UserError("Sold properties cannot receive new offers.")
+
             highest_offer = max(offer_property.offer_ids.mapped("price"), default=0)
             if vals["price"] <= highest_offer:
                     raise ValidationError(f"The offer must be higher than the existing offers: {highest_offer}")

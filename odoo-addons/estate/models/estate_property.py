@@ -132,11 +132,27 @@ class EstateProperty(models.Model):
                 property.garden_area = 0
                 property.garden_orientation = False
 
+
     def action_sold(self):
         for property in self:
             if property.status == "cancelled":
                 raise UserError("Cancelled properties cannot be sold")
+
+            # if not property.offer_ids.filtered(lambda offer: offer.status == "accepted"):
+            #     raise UserError("A property cannot be sold without an accepted offer.")
+
+            accepted_offer = False
+
+            for offer in property.offer_ids:
+                if offer.status == "accepted":
+                    accepted_offer = True
+                    break
+
+            if not accepted_offer:
+                raise UserError("A property cannot be sold without an accepted offer.")
+
             property.status = "sold"
+
 
     def action_cancel(self):
         for property in self:
