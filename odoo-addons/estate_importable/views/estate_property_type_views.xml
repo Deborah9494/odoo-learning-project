@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Action -->
+    <record id="action_real_estate_property_type" model="ir.actions.act_window">
+        <field name="name">Types</field>
+        <field name="res_model">x_estate.property.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Tree view -->
+    <record id="view_real_estate_property_type_tree" model="ir.ui.view">
+        <field name="name">x_estate.property.type.tree</field>
+        <field name="model">x_estate.property.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="x_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="view_real_estate_property_type_form" model="ir.ui.view">
+        <field name="name">x_estate.property.type.form</field>
+        <field name="model">x_estate.property.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="x_name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        id="menu_real_estate_property_type"
+        name="Properties Types"
+        action="action_real_estate_property_type"
+    />
+
+</odoo>
