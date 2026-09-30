@@ -279,14 +279,4 @@
         <field name="context">{'search_default_available': 1}</field>
     </record>
 
-    <menuitem
-        id="estate_menu_root"
-        name="Estate"/>
-
-    <menuitem
-        id="estate_property_menu"
-        name="Properties"
-        parent="estate_menu_root"
-        action="estate_property_action"/>
-
 </odoo>

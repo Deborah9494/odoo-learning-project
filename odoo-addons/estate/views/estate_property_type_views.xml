@@ -66,16 +66,4 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem
-        id="estate_configuration_menu"
-        name="Configuration"
-        parent="estate_menu_root"
-        groups="estate_group_manager"/>
-
-    <menuitem
-        id="estate_property_type_menu"
-        name="Property Types"
-        parent="estate_configuration_menu"
-        action="estate_property_type_action"/>
-
 </odoo>

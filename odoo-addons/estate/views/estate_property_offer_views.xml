@@ -102,10 +102,4 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem
-        id="estate_property_offer_menu"
-        name="Offers"
-        parent="estate_menu_root"
-        action="estate_property_offer_action"/>
-
 </odoo>

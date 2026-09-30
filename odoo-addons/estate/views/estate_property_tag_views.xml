@@ -43,10 +43,4 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem
-        id="estate_property_tag_menu"
-        name="Property Tags"
-        parent="estate_configuration_menu"
-        action="estate_property_tag_action"/>
-
 </odoo>
