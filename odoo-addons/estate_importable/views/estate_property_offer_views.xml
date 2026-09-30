@@ -9,6 +9,19 @@
                 <field name="x_price"/>
                 <field name="x_partner_id"/>
                 <field name="x_status"/>
+                <button
+                    name="estate_importable.action_x_estate_property_offer_accept"
+                    type="action"
+                    icon="fa-check"
+                    string="Accept"/>
+                <button
+                    name="estate_importable.action_x_estate_property_offer_refuse"
+                    type="action"
+                    icon="fa-times"
+                    string="Refuse"
+                    />
+                <!-- In the buttons can add class:
+                class="btn-danger" -->
             </tree>
         </field>
     </record>

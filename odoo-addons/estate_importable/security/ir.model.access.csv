@@ -3,3 +3,4 @@ access_real_estate_property_user,access.real.estate.property.user,model_real_est
 access_real_estate_property_type_user,access.real.estate.property.type.user,model_real_estate_property_type,base.group_user,1,1,1,1
 access_real_estate_property_tag_user,access.real.estate.property.tag.user,model_real_estate_property_tag,base.group_user,1,1,1,1
 access_real_estate_property_offer_user,access.real.estate.property.offer.user,model_real_estate_property_offer,base.group_user,1,1,1,1
+access_real_estate_property_public,access.real.estate.property.public,model_real_estate_property,base.group_public,1,1,0,0

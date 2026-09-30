@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- 
+    Tutorial: Write Importable modules
+    Section: Website controllers
+
+    Old stet 5: add a server action to return a list of properties in JSON format when the URL /actions/api/estate is called (It could not be implemented)
+
+    New step 5: 
+    Create a QWeb website view:
+    <template id="property_list_template">
+        ...
+    </template>
+    and a website page:
+    <record id="page_property_list" model="website.page">
+        <field name="url">/properties</field>
+        ...
+    </record>
+    So you can visit:
+    http://localhost:8069/properties
+    and Odoo renders a page containing properties: in a private window are shown only published properties.
+    -->
+
+    <!-- Public property listing page -->
+    <template id="property_list_template" name="Properties Listing">
+        <t t-call="website.layout">
+            <div id="wrap" class="container mt-4">
+                <h1>Available Properties</h1>
+                <div class="row mt-4">
+                    <t t-set="properties"
+                       t-value="request.env['x_estate.property'].search([])"/>
+                    <t t-foreach="properties" t-as="property">
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <t t-out="property.x_name"/>
+                                    </h5>
+                                    <p>
+                                        Price:
+                                        <t t-out="property.x_selling_price"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Website page -->
+    <record id="page_property_list" model="website.page">
+        <field name="name">Properties</field>
+        <field name="url">/properties</field>
+        <field name="view_id" ref="property_list_template"/>
+        <field name="website_published">True</field>
+    </record>
+
+</odoo>
