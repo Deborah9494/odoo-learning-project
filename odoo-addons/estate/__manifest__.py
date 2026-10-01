@@ -2,7 +2,10 @@
 {
     "name": "Estate",          # Nombre visible
     "version": "1.0",          # Versión
-    "depends": ["base"],       # Dependencias
+    "depends": [
+        "base",
+        "website",
+    ],       # Dependencias
     "author": "Deborah Iori",  # Autor
     "category": "Real Estate/Brokerage", # Categoría
     "summary": "Learning Odoo",# Descripción corta
@@ -15,8 +18,8 @@
         "views/estate_property_offer_views.xml",
         'views/res_users_views.xml',
         "views/estate_menus.xml",
+        "views/estate_templates.xml",
         'data/estate.property.type.csv',
-        
     ],
     "demo": [
         "demo/estate_property_demo.xml",

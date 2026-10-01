@@ -124,6 +124,7 @@
                                 options="{'no_create': True, 'no_open': True}"/>
                             <field name="postcode"/>
                             <field name="date_availability"/>
+                            <field name="api_published"/>
                         </group>
 
                         <group>

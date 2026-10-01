@@ -108,6 +108,11 @@ class EstateProperty(models.Model):
         default=lambda self: self.env.company,
     )
 
+    api_published = fields.Boolean(
+        string="API Published",
+        default=False,
+    )
+
     @api.depends("living_area", "garden_area")
     def _compute_total_area(self):
         for property in self:

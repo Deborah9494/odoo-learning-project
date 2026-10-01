@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="properties_page" name="Estate Properties">
+        <t t-call="website.layout">
+            <div class="container my-5">
+                <h1>Available Properties</h1>
+                <div class="row mt-4">
+                    <t t-foreach="properties" t-as="property">
+
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h2>
+                                    <t t-esc="property.name"/>
+                                </h2>
+                                <p>
+                                    <strong>Description:</strong>
+                                    <t t-esc="property.description"/>
+                                </p>
+                                <p>
+                                    <strong>Expected price:</strong>
+                                    <t t-esc="'{:,.0f} €'.format(property.expected_price).replace(',', '.')"/>
+                                </p>
+                                <p>
+                                    <strong>Bedrooms:</strong>
+                                    <t t-esc="property.bedrooms"/>
+                                </p>
+                                <p>
+                                    <strong>Living area:</strong>
+                                    <t t-esc="property.living_area"/> m²
+                                </p>
+                                <p>
+                                    <strong>Postcode:</strong>
+                                    <t t-esc="property.postcode"/>
+                                </p>
+                                <p>
+                                    <strong>Garden:</strong>
+                                    <t t-if="property.garden">Yes</t>
+                                    <t t-else="">No</t>
+                                </p>
+                            </div>
+                        </div>
+
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>
