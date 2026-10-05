@@ -102,6 +102,21 @@ class EstatePropertyOffer(models.Model):
             estate_property.buyer_id = offer.partner_id
             estate_property.selling_price = offer.price
 
+            # When an offer is accepted, post a message and classify it as event "Offer accepted"
+            estate_property.message_post(
+                body=f"Oferta aceptada: {offer.price} € de {offer.partner_id.name}",
+                subtype_xmlid="estate.mt_property_offer_accepted",
+            )
+
+            # When an offer is accepted, automatically create a "Visita a propriedad" activity on the property
+            estate_property.activity_schedule(
+                "estate.activity_type_property_viewing",
+                user_id=estate_property.salesperson_id.id or self.env.user.id,
+                date_deadline=fields.Date.today() + relativedelta(days=3),
+                summary="Seguimiento de oferta",
+                note="Contactar con el comprador para hacer seguimiento de la oferta aceptada.",
+            )
+
     def action_refuse(self):
         for offer in self:
             offer.status = "refused"
@@ -130,7 +145,23 @@ class EstatePropertyOffer(models.Model):
             #     if vals["price"] <= other_offer.price:
             #         raise ValidationError(f"The offer must be higher than the existing offers: {other_offer.price}")
         offers = super().create(vals_list)
+
+        template = self.env.ref("estate.email_template_new_offer")
+
         for offer in offers:
             # At offer creation, set the property state to “Offer Received”.
             offer.property_id.status = "offer_received"
+            
+            # Add a message to the property's chatter. Classify the message as the "New Offer" event
+            offer.property_id.message_post(
+                body=f"Nueva oferta recibida: {offer.price} € de {offer.partner_id.name}",
+                subtype_xmlid="estate.mt_property_offer_received",
+            )
+
+            # Send the new-offer email.
+            template.send_mail(offer.id, force_send=True)
+
+
+
+
         return offers

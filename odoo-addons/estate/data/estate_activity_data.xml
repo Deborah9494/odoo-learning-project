@@ -1,0 +1,50 @@
+<odoo>
+
+    <!-- Activity Type -->
+    <record id="activity_type_property_viewing" model="mail.activity.type">
+        <field name="name">Visita a propiedad</field>
+        <field name="icon">fa-calendar</field>
+    </record>
+
+    <!-- Mail Subtypes -->
+    <record id="mt_property_offer_received" model="mail.message.subtype">
+        <field name="name">New Offer</field>
+        <field name="res_model">estate.property</field>
+        <field name="description">A new offer has been received.</field>
+    </record>
+
+    <record id="mt_property_offer_accepted" model="mail.message.subtype">
+        <field name="name">Offer Accepted</field>
+        <field name="res_model">estate.property</field>
+        <field name="description">An offer has been accepted.</field>
+    </record>
+
+    <record id="mt_property_sold" model="mail.message.subtype">
+        <field name="name">Property Sold</field>
+        <field name="res_model">estate.property</field>
+        <field name="description">The property has been sold.</field>
+    </record>
+
+    <record id="email_template_new_offer" model="mail.template">
+        <field name="name">New Offer Notification</field>
+        <field name="model_id" ref="estate.model_estate_property_offer"/>
+        <field name="subject">New offer for {{ object.property_id.name }}</field>
+        <field name="email_from">{{ object.property_id.salesperson_id.email or user.email }}</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>Hello <t t-out="object.partner_id.name or ''"/>,</p>
+
+                <p>
+                    A new offer of
+                    <strong><t t-out="object.price or 0"/> €</strong>
+                    has been received for
+                    <strong><t t-out="object.property_id.name or ''"/></strong>.
+                </p>
+
+                <p>Thank you.</p>
+            </div>
+        </field>
+    </record>
+
+</odoo>

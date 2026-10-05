@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="action_estate_property_ratings" model="ir.actions.act_window">
+        <field name="name">Property Ratings</field>
+        <field name="res_model">rating.rating</field>
+        <field name="view_mode">kanban,pivot,graph</field>
+        <field name="domain">[
+            ('res_model', '=', 'estate.property'),
+            ('res_id', '=', active_id),
+            ('consumed', '=', True)
+        ]</field>
+        <!-- consumed = True means only ratings that have actually been submitted/processed -->
+    </record>
+
     <record id="estate_property_view_kanban" model="ir.ui.view">
         <field name="name">estate.property.kanban</field>
         <field name="model">estate.property</field>
@@ -11,6 +23,7 @@
                 group_create="false">
                 <field name="status"/>
                 <field name="tag_ids"/>
+                <field name="activity_ids"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
@@ -37,6 +50,11 @@
                                     widget="many2many_tags"
                                     options="{'color_field': 'color'}"/>
                             </div>
+
+                            <div>
+                                <field name="activity_ids" widget="kanban_activity"/>
+                            </div>
+
                         </div>
                     </t>
                 </templates>
@@ -96,6 +114,14 @@
                         type="object"
                         string="Cancel"
                         invisible="status in ('sold', 'cancelled')"/>
+
+                    <button
+                        name="%(action_estate_property_ratings)d"
+                        type="action"
+                        string="Ratings"
+                        class="oe_stat_button"
+                        icon="fa-star"
+                    />
                         
                     <field
                         name="status"
@@ -194,6 +220,15 @@
                     </notebook>
 
                 </sheet>
+
+                <!-- chatter integration -->
+                <div class="oe_chatter">
+                    <!-- fields from mail.thread -->
+                    <field name="message_follower_ids"/>  <!-- people following this property -->
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/> <!-- messages/activity history displayed in the chatter -->
+                </div>
+
             </form>
         </field>
 

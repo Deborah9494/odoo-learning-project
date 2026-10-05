@@ -5,6 +5,8 @@
     "depends": [
         "base",
         "website",
+        "mail",
+        "rating",
     ],       # Dependencias
     "author": "Deborah Iori",  # Autor
     "category": "Real Estate/Brokerage", # Categoría
@@ -20,6 +22,8 @@
         "views/estate_menus.xml",
         "views/estate_templates.xml",
         'data/estate.property.type.csv',
+        'data/estate_activity_data.xml',
+        'data/estate_rating_data.xml',
     ],
     "demo": [
         "demo/estate_property_demo.xml",

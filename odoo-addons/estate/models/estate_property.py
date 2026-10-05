@@ -6,9 +6,12 @@ from odoo.exceptions import UserError, ValidationError
 
 class EstateProperty(models.Model):
     _name = "estate.property"
+    _inherit = [
+        "mail.activity.mixin",
+        "rating.mixin", # Technically already inherits mail.thread
+    ]
     _description = "Estate Property"
     _order = "id desc"
-
 
     name = fields.Char(string="Title", required=True) 
     description = fields.Text(string="Description", required=True)
@@ -19,7 +22,12 @@ class EstateProperty(models.Model):
         default=lambda self: fields.Date.today() + relativedelta(months=3) # for each row: availability date = today + 3 months
     )
 
-    expected_price = fields.Float(string="Expected Price", required=True)
+    expected_price = fields.Float(
+        string="Expected Price", 
+        required=True,
+        tracking=True,
+    )
+    
     selling_price = fields.Float(
         string="Selling Price",
         readonly=True, # El usuario no debe escribir el precio de venta manualmente. Más adelante, cuando una oferta sea aceptada, se actualizará automáticamente
@@ -113,6 +121,11 @@ class EstateProperty(models.Model):
         default=False,
     )
 
+    # Tell the mixin which field contains the customer.
+    # The default field is partner_id, but our model uses buyer_id.
+    def rating_get_partner_id(self):
+        return self.buyer_id
+    
     @api.depends("living_area", "garden_area")
     def _compute_total_area(self):
         for property in self:
@@ -157,6 +170,18 @@ class EstateProperty(models.Model):
                 raise UserError("A property cannot be sold without an accepted offer.")
 
             property.status = "sold"
+
+            # Chatter messager
+            property.message_post(
+                body="Propiedad vendida.",
+                subtype_xmlid="estate.mt_property_sold",
+            )
+
+            # Send customer rating request
+            template = self.env.ref(
+                "estate.email_template_rating_request"
+            )
+            property.rating_send_request(template)
 
 
     def action_cancel(self):
